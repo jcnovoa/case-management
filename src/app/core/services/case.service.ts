@@ -9,20 +9,23 @@ import { Case } from '../models/case.model';
 export class CaseService {
   // In a real application, this would be an API endpoint
   private apiUrl = 'api/cases';
+  private mockCases: Case[] = [];
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    // Initialize with some mock data
+    this.mockCases = this.getMockCases();
+  }
 
   // For demo purposes, we'll use mock data
   // In a real application, these methods would call the API
   getCases(): Observable<Case[]> {
     // This would be: return this.http.get<Case[]>(this.apiUrl);
-    return of(this.getMockCases());
+    return of(this.mockCases);
   }
 
   getCase(id: string): Observable<Case> {
     // This would be: return this.http.get<Case>(`${this.apiUrl}/${id}`);
-    const cases = this.getMockCases();
-    const foundCase = cases.find(c => c.id === id);
+    const foundCase = this.mockCases.find(c => c.id === id);
     return of(foundCase as Case);
   }
 
@@ -34,20 +37,23 @@ export class CaseService {
       createdDate: new Date(),
       updatedDate: new Date()
     };
+    
+    // Add to our mock data
+    this.mockCases.push(newCase);
+    
     return of(newCase);
   }
 
   updateCase(id: string, caseData: Partial<Case>): Observable<Case> {
     // This would be: return this.http.put<Case>(`${this.apiUrl}/${id}`, caseData);
-    const cases = this.getMockCases();
-    const index = cases.findIndex(c => c.id === id);
+    const index = this.mockCases.findIndex(c => c.id === id);
     if (index !== -1) {
       const updatedCase: Case = {
-        ...cases[index],
+        ...this.mockCases[index],
         ...caseData,
         updatedDate: new Date()
       };
-      cases[index] = updatedCase;
+      this.mockCases[index] = updatedCase;
       return of(updatedCase);
     }
     throw new Error('Case not found');
@@ -55,6 +61,10 @@ export class CaseService {
 
   deleteCase(id: string): Observable<void> {
     // This would be: return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    const index = this.mockCases.findIndex(c => c.id === id);
+    if (index !== -1) {
+      this.mockCases.splice(index, 1);
+    }
     return of(undefined);
   }
 

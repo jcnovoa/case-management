@@ -13,19 +13,27 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { CasesListComponent } from './cases-list/cases-list.component';
+import { CaseFormComponent } from './case-form/case-form.component';
 
 const routes: Routes = [
   {
     path: '',
     component: CasesListComponent
+  },
+  {
+    path: 'new',
+    component: CaseFormComponent
   }
 ];
 
 @NgModule({
   declarations: [
-    CasesListComponent
+    CasesListComponent,
+    CaseFormComponent
   ],
   imports: [
     CommonModule,
@@ -41,7 +49,9 @@ const routes: Routes = [
     MatSelectModule,
     MatDatepickerModule,
     MatCardModule,
-    MatChipsModule
+    MatChipsModule,
+    MatProgressSpinnerModule,
+    MatSnackBarModule
   ]
 })
 export class CasesModule { }
