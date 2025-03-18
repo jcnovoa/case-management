@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CaseService } from '../../../core/services/case.service';
+import { PlatformModuleService } from '../../../core/services/platform-module.service';
 
 @Component({
   selector: 'app-case-form',
@@ -12,20 +13,12 @@ import { CaseService } from '../../../core/services/case.service';
 export class CaseFormComponent implements OnInit {
   caseForm: FormGroup;
   submitting = false;
-  
-  platformModules = [
-    'Home',
-    'Analytics',
-    'Evaluations',
-    'Playbooks',
-    'Work',
-    'My Space',
-    'Administration'
-  ];
+  platformModules: string[] = [];
 
   constructor(
     private fb: FormBuilder,
     private caseService: CaseService,
+    private platformModuleService: PlatformModuleService,
     private router: Router,
     private snackBar: MatSnackBar
   ) {
@@ -39,6 +32,11 @@ export class CaseFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Load platform modules from service
+    this.platformModuleService.getPlatformModules().subscribe(modules => {
+      this.platformModules = modules;
+      console.log('Platform modules loaded:', this.platformModules);
+    });
   }
 
   onSubmit(): void {
