@@ -38,9 +38,13 @@
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Platform Module</mat-label>
               <mat-select formControlName="platformModule">
-                <mat-option *ngFor="let module of platformModules" [value]="module">
-                  {{ module }}
-                </mat-option>
+                <mat-option value="Home">Home</mat-option>
+                <mat-option value="Analytics">Analytics</mat-option>
+                <mat-option value="Evaluations">Evaluations</mat-option>
+                <mat-option value="Playbooks">Playbooks</mat-option>
+                <mat-option value="Work">Work</mat-option>
+                <mat-option value="My Space">My Space</mat-option>
+                <mat-option value="Administration">Administration</mat-option>
               </mat-select>
               <mat-error *ngIf="caseForm.get('platformModule')?.invalid && caseForm.get('platformModule')?.touched">
                 {{ getErrorMessage('platformModule') }}
