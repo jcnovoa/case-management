@@ -1,0 +1,51 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.app-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+}
+
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+.sidenav-container {
+  flex: 1;
+  margin-top: 64px; // Height of the toolbar
+}
+
+.sidenav {
+  width: 250px;
+  padding-top: 10px;
+}
+
+.nav-link-text {
+  margin-left: 10px;
+}
+
+.content {
+  padding: 20px;
+}
+
+.content-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+// Make the app responsive
+@media (max-width: 600px) {
+  .sidenav-container {
+    margin-top: 56px; // Smaller toolbar height on mobile
+  }
+  
+  .sidenav {
+    width: 200px;
+  }
+}

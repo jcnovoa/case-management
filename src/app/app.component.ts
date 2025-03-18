@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { faCoffee, faFolder, faUser, faChartBar, faCog } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'case-management';
+  title = 'Case Management';
+  
+  // Font Awesome icons
+  faCoffee = faCoffee;
+  faFolder = faFolder;
+  faUser = faUser;
+  faChartBar = faChartBar;
+  faCog = faCog;
 }

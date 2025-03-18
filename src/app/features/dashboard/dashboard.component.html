@@ -1,0 +1,106 @@
+<div class="dashboard-container">
+  <h1>Dashboard</h1>
+  
+  <div class="stats-container">
+    <mat-card class="stats-card">
+      <mat-card-header>
+        <mat-card-title>Case Overview</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-value">{{caseStats.total}}</div>
+            <div class="stat-label">Total Cases</div>
+          </div>
+          <div class="stat-item new">
+            <div class="stat-value">{{caseStats.new}}</div>
+            <div class="stat-label">New</div>
+          </div>
+          <div class="stat-item in-progress">
+            <div class="stat-value">{{caseStats.inProgress}}</div>
+            <div class="stat-label">In Progress</div>
+          </div>
+          <div class="stat-item on-hold">
+            <div class="stat-value">{{caseStats.onHold}}</div>
+            <div class="stat-label">On Hold</div>
+          </div>
+          <div class="stat-item resolved">
+            <div class="stat-value">{{caseStats.resolved}}</div>
+            <div class="stat-label">Resolved</div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stats-card">
+      <mat-card-header>
+        <mat-card-title>Cases by Priority</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="stats-grid">
+          <div class="stat-item critical">
+            <div class="stat-value">{{priorityStats.critical}}</div>
+            <div class="stat-label">Critical</div>
+          </div>
+          <div class="stat-item high">
+            <div class="stat-value">{{priorityStats.high}}</div>
+            <div class="stat-label">High</div>
+          </div>
+          <div class="stat-item medium">
+            <div class="stat-value">{{priorityStats.medium}}</div>
+            <div class="stat-label">Medium</div>
+          </div>
+          <div class="stat-item low">
+            <div class="stat-value">{{priorityStats.low}}</div>
+            <div class="stat-label">Low</div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <mat-card class="recent-cases-card">
+    <mat-card-header>
+      <mat-card-title>Recent Cases</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <table class="recent-cases-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Customer</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let case of recentCases">
+            <td>{{case.id}}</td>
+            <td>{{case.title}}</td>
+            <td>
+              <span class="status-badge" [ngClass]="case.status.toLowerCase().replace(' ', '-')">
+                {{case.status}}
+              </span>
+            </td>
+            <td>
+              <span class="priority-badge" [ngClass]="case.priority.toLowerCase()">
+                {{case.priority}}
+              </span>
+            </td>
+            <td>{{case.customer}}</td>
+            <td>
+              <button mat-icon-button color="primary" [routerLink]="['/cases', case.id]">
+                <mat-icon>visibility</mat-icon>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button color="primary" routerLink="/cases">View All Cases</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
