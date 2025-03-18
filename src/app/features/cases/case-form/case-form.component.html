@@ -35,21 +35,20 @@
           <h3>Case Details</h3>
           
           <div class="form-row">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Platform Module</mat-label>
-              <mat-select formControlName="platformModule">
-                <mat-option value="Home">Home</mat-option>
-                <mat-option value="Analytics">Analytics</mat-option>
-                <mat-option value="Evaluations">Evaluations</mat-option>
-                <mat-option value="Playbooks">Playbooks</mat-option>
-                <mat-option value="Work">Work</mat-option>
-                <mat-option value="My Space">My Space</mat-option>
-                <mat-option value="Administration">Administration</mat-option>
-              </mat-select>
-              <mat-error *ngIf="caseForm.get('platformModule')?.invalid && caseForm.get('platformModule')?.touched">
-                {{ getErrorMessage('platformModule') }}
-              </mat-error>
-            </mat-form-field>
+            <label for="platformModule">Platform Module</label>
+            <select id="platformModule" formControlName="platformModule" class="form-select">
+              <option value="">Select a platform module</option>
+              <option value="Home">Home</option>
+              <option value="Analytics">Analytics</option>
+              <option value="Evaluations">Evaluations</option>
+              <option value="Playbooks">Playbooks</option>
+              <option value="Work">Work</option>
+              <option value="My Space">My Space</option>
+              <option value="Administration">Administration</option>
+            </select>
+            <div *ngIf="caseForm.get('platformModule')?.invalid && caseForm.get('platformModule')?.touched" class="error-message">
+              {{ getErrorMessage('platformModule') }}
+            </div>
           </div>
           
           <div class="form-row">
