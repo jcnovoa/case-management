@@ -54,8 +54,8 @@ export class CaseFormComponent implements OnInit {
     const newCase = {
       title: formValue.subject,
       description: formValue.description,
-      status: 'New',
-      priority: 'Medium',
+      status: 'New' as 'New' | 'In Progress' | 'On Hold' | 'Resolved' | 'Closed',
+      priority: 'Medium' as 'Low' | 'Medium' | 'High' | 'Critical',
       customerId: 'new-customer',
       customerName: formValue.name,
       createdDate: new Date(),
