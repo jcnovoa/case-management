@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CaseService } from '../../../core/services/case.service';
 
@@ -12,6 +12,8 @@ import { CaseService } from '../../../core/services/case.service';
 export class CaseFormComponent implements OnInit {
   caseForm: FormGroup;
   submitting = false;
+  isEditMode = false;
+  caseId: string | null = null;
   
   // Define platform modules directly in the component for now
   platformModules: string[] = [
@@ -28,6 +30,7 @@ export class CaseFormComponent implements OnInit {
     private fb: FormBuilder,
     private caseService: CaseService,
     private router: Router,
+    private route: ActivatedRoute,
     private snackBar: MatSnackBar
   ) {
     this.caseForm = this.fb.group({
@@ -40,8 +43,34 @@ export class CaseFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Log to verify modules are available
-    console.log('Platform modules:', this.platformModules);
+    // Check if we're in edit mode
+    this.caseId = this.route.snapshot.paramMap.get('id');
+    this.isEditMode = !!this.caseId;
+    
+    if (this.isEditMode && this.caseId) {
+      this.loadCaseData(this.caseId);
+    }
+  }
+
+  loadCaseData(id: string): void {
+    this.caseService.getCase(id).subscribe({
+      next: (caseData) => {
+        // Populate the form with existing case data
+        this.caseForm.patchValue({
+          name: caseData.customerName,
+          email: caseData.customerEmail || '',
+          subject: caseData.title,
+          description: caseData.description,
+          platformModule: caseData.tags && caseData.tags.length > 0 ? caseData.tags[0] : ''
+        });
+      },
+      error: (error) => {
+        this.snackBar.open('Error loading case data', 'Close', {
+          duration: 5000
+        });
+        console.error('Error loading case:', error);
+      }
+    });
   }
 
   onSubmit(): void {
@@ -54,39 +83,59 @@ export class CaseFormComponent implements OnInit {
     const formValue = this.caseForm.value;
     
     // Create the case object
-    const newCase = {
+    const caseData = {
       title: formValue.subject,
       description: formValue.description,
-      status: 'New' as 'New' | 'In Progress' | 'On Hold' | 'Resolved' | 'Closed',
-      priority: 'Medium' as 'Low' | 'Medium' | 'High' | 'Critical',
+      status: this.isEditMode ? undefined : 'New' as 'New' | 'In Progress' | 'On Hold' | 'Resolved' | 'Closed',
+      priority: this.isEditMode ? undefined : 'Medium' as 'Low' | 'Medium' | 'High' | 'Critical',
       customerId: 'new-customer',
       customerName: formValue.name,
-      createdDate: new Date(),
       updatedDate: new Date(),
       tags: [formValue.platformModule],
-      // Store additional info in a custom field
       customerEmail: formValue.email
     };
 
-    this.caseService.createCase(newCase).subscribe({
-      next: (result) => {
-        this.submitting = false;
-        this.snackBar.open('Case created successfully!', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'bottom'
-        });
-        this.router.navigate(['/cases']);
-      },
-      error: (error) => {
-        this.submitting = false;
-        this.snackBar.open('Error creating case. Please try again.', 'Close', {
-          duration: 5000,
-          horizontalPosition: 'center',
-          verticalPosition: 'bottom'
-        });
-        console.error('Error creating case:', error);
-      }
+    if (this.isEditMode && this.caseId) {
+      // Update existing case
+      this.caseService.updateCase(this.caseId, caseData).subscribe({
+        next: (result) => {
+          this.handleSuccess('Case updated successfully!');
+        },
+        error: (error) => {
+          this.handleError('Error updating case. Please try again.');
+          console.error('Error updating case:', error);
+        }
+      });
+    } else {
+      // Create new case
+      this.caseService.createCase(caseData).subscribe({
+        next: (result) => {
+          this.handleSuccess('Case created successfully!');
+        },
+        error: (error) => {
+          this.handleError('Error creating case. Please try again.');
+          console.error('Error creating case:', error);
+        }
+      });
+    }
+  }
+
+  private handleSuccess(message: string): void {
+    this.submitting = false;
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom'
+    });
+    this.router.navigate(['/cases']);
+  }
+
+  private handleError(message: string): void {
+    this.submitting = false;
+    this.snackBar.open(message, 'Close', {
+      duration: 5000,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom'
     });
   }
 

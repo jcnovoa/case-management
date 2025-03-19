@@ -15,9 +15,13 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatBadgeModule } from '@angular/material/badge';
 
 import { CasesListComponent } from './cases-list/cases-list.component';
 import { CaseFormComponent } from './case-form/case-form.component';
+import { CaseDetailComponent } from './case-detail/case-detail.component';
 
 const routes: Routes = [
   {
@@ -27,13 +31,22 @@ const routes: Routes = [
   {
     path: 'new',
     component: CaseFormComponent
+  },
+  {
+    path: ':id',
+    component: CaseDetailComponent
+  },
+  {
+    path: ':id/edit',
+    component: CaseFormComponent
   }
 ];
 
 @NgModule({
   declarations: [
     CasesListComponent,
-    CaseFormComponent
+    CaseFormComponent,
+    CaseDetailComponent
   ],
   imports: [
     CommonModule,
@@ -51,7 +64,10 @@ const routes: Routes = [
     MatCardModule,
     MatChipsModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatDividerModule,
+    MatTabsModule,
+    MatBadgeModule
   ]
 })
 export class CasesModule { }

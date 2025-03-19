@@ -1,0 +1,97 @@
+<div class="case-detail-container">
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading case details...</p>
+  </div>
+
+  <div *ngIf="error" class="error-container">
+    <mat-icon color="warn">error</mat-icon>
+    <p>Failed to load case details. Please try again later.</p>
+    <button mat-raised-button color="primary" [routerLink]="['/cases']">Back to Cases</button>
+  </div>
+
+  <div *ngIf="!loading && !error && case">
+    <div class="header">
+      <div class="title-section">
+        <h1>{{ case.title }}</h1>
+        <div class="case-id">Case #{{ case.id }}</div>
+      </div>
+      <div class="actions">
+        <button mat-raised-button color="primary" (click)="editCase()">
+          <mat-icon>edit</mat-icon>
+          Edit
+        </button>
+        <button mat-button color="warn" (click)="deleteCase()">
+          <mat-icon>delete</mat-icon>
+          Delete
+        </button>
+        <button mat-button [routerLink]="['/cases']">
+          <mat-icon>arrow_back</mat-icon>
+          Back to Cases
+        </button>
+      </div>
+    </div>
+
+    <mat-card class="case-info-card">
+      <mat-card-content>
+        <div class="status-priority-row">
+          <div class="status-badge" [ngClass]="getStatusClass(case.status)">
+            <mat-icon>lens</mat-icon>
+            {{ case.status }}
+          </div>
+          <div class="priority-badge" [ngClass]="getPriorityClass(case.priority)">
+            <mat-icon>flag</mat-icon>
+            {{ case.priority }} Priority
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="label">Customer</div>
+            <div class="value">{{ case.customerName }}</div>
+          </div>
+          <div class="info-item">
+            <div class="label">Customer ID</div>
+            <div class="value">{{ case.customerId }}</div>
+          </div>
+          <div class="info-item">
+            <div class="label">Created</div>
+            <div class="value">{{ case.createdDate | date:'medium' }}</div>
+          </div>
+          <div class="info-item">
+            <div class="label">Last Updated</div>
+            <div class="value">{{ case.updatedDate | date:'medium' }}</div>
+          </div>
+          <div class="info-item" *ngIf="case.assignedTo">
+            <div class="label">Assigned To</div>
+            <div class="value">{{ case.assignedTo }}</div>
+          </div>
+          <div class="info-item" *ngIf="case.dueDate">
+            <div class="label">Due Date</div>
+            <div class="value">{{ case.dueDate | date:'mediumDate' }}</div>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="tags-section" *ngIf="case.tags && case.tags.length > 0">
+          <div class="section-title">Tags</div>
+          <div class="tags">
+            <mat-chip-listbox>
+              <mat-chip *ngFor="let tag of case.tags">{{ tag }}</mat-chip>
+            </mat-chip-listbox>
+          </div>
+        </div>
+
+        <div class="description-section">
+          <div class="section-title">Description</div>
+          <div class="description">
+            {{ case.description }}
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
