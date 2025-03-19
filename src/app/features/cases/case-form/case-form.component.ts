@@ -90,6 +90,7 @@ export class CaseFormComponent implements OnInit {
       priority: this.isEditMode ? undefined : 'Medium' as 'Low' | 'Medium' | 'High' | 'Critical',
       customerId: 'new-customer',
       customerName: formValue.name,
+      createdDate: new Date(), // Add createdDate for new cases
       updatedDate: new Date(),
       tags: [formValue.platformModule],
       customerEmail: formValue.email
