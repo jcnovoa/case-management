@@ -13,6 +13,7 @@ export interface Case {
   tags?: string[];
   attachments?: Attachment[];
   comments?: Comment[];
+  customerEmail?: string; // Add customerEmail field
 }
 
 export interface Attachment {

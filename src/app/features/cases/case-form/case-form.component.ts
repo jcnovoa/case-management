@@ -82,23 +82,18 @@ export class CaseFormComponent implements OnInit {
     this.submitting = true;
     const formValue = this.caseForm.value;
     
-    // Create the case object
-    const caseData = {
-      title: formValue.subject,
-      description: formValue.description,
-      status: this.isEditMode ? undefined : 'New' as 'New' | 'In Progress' | 'On Hold' | 'Resolved' | 'Closed',
-      priority: this.isEditMode ? undefined : 'Medium' as 'Low' | 'Medium' | 'High' | 'Critical',
-      customerId: 'new-customer',
-      customerName: formValue.name,
-      createdDate: new Date(), // Add createdDate for new cases
-      updatedDate: new Date(),
-      tags: [formValue.platformModule],
-      customerEmail: formValue.email
-    };
-
     if (this.isEditMode && this.caseId) {
       // Update existing case
-      this.caseService.updateCase(this.caseId, caseData).subscribe({
+      const updateData = {
+        title: formValue.subject,
+        description: formValue.description,
+        customerName: formValue.name,
+        updatedDate: new Date(),
+        tags: [formValue.platformModule],
+        customerEmail: formValue.email
+      };
+      
+      this.caseService.updateCase(this.caseId, updateData).subscribe({
         next: (result) => {
           this.handleSuccess('Case updated successfully!');
         },
@@ -109,7 +104,20 @@ export class CaseFormComponent implements OnInit {
       });
     } else {
       // Create new case
-      this.caseService.createCase(caseData).subscribe({
+      const newCase = {
+        title: formValue.subject,
+        description: formValue.description,
+        status: 'New' as 'New' | 'In Progress' | 'On Hold' | 'Resolved' | 'Closed',
+        priority: 'Medium' as 'Low' | 'Medium' | 'High' | 'Critical',
+        customerId: 'new-customer',
+        customerName: formValue.name,
+        createdDate: new Date(),
+        updatedDate: new Date(),
+        tags: [formValue.platformModule],
+        customerEmail: formValue.email
+      };
+      
+      this.caseService.createCase(newCase).subscribe({
         next: (result) => {
           this.handleSuccess('Case created successfully!');
         },
